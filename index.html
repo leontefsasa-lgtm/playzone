@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f7fb">
+<title>PLAYZONE — игровой портал</title>
+<style>
+:root {
+  --site-primary: #5865e8;
+  --site-on-primary: #ffffff;
+  --site-secondary: #e9edff;
+  --site-on-secondary: #29336f;
+  --site-background: #f5f7fb;
+  --site-on-background: #20243a;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+#app { min-height: 100vh; width: 100%; background-color: light-dark(var(--site-background), #171925); color: light-dark(var(--site-on-background), #f3f4fb); border-radius: 0; }
+.site-header { max-width: 1120px; margin: auto; padding: calc(20px * var(--site-spacing-scale)) calc(20px * var(--site-spacing-scale)); display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.brand { display:flex; align-items:center; gap:10px; font-weight:850; letter-spacing:-.6px; font-size:20px; }
+.brand-mark { width:36px; height:36px; display:grid; place-items:center; border-radius:calc(12px * var(--site-radius-scale)); background:var(--site-primary); color:var(--site-on-primary); }
+nav { display:flex; gap:22px; align-items:center; }
+nav a { color:inherit; text-decoration:none; font-size:14px; opacity:.75; }
+nav a:hover { opacity:1; color:var(--site-primary); }
+.wrap { max-width:1120px; margin:auto; padding:0 20px 60px; }
+.hero { margin-top:18px; border-radius:calc(28px * var(--site-radius-scale)); background:var(--site-secondary); color:var(--site-on-secondary); padding:clamp(28px,6vw,64px); display:grid; grid-template-columns:1.2fr .8fr; gap:25px; align-items:center; overflow:hidden; position:relative; }
+.eyebrow { display:inline-flex; padding:8px 12px; border-radius:999px; background:rgba(255,255,255,.7); color:#4c57c9; font-size:12px; font-weight:750; letter-spacing:.5px; text-transform:uppercase; }
+h1 { font-family:var(--site-font-heading); font-size:calc(clamp(38px,6vw,66px) * var(--site-heading-scale)); line-height:1.02; letter-spacing:-2.5px; margin:18px 0 14px; }
+.hero p { max-width:490px; line-height:1.7; opacity:.8; margin:0 0 24px; }
+.actions { display:flex; flex-wrap:wrap; gap:10px; }
+.btn { border:0; cursor:pointer; padding:13px 18px; border-radius:calc(13px * var(--site-radius-scale)); font-weight:750; font-size:14px; background:var(--site-primary); color:var(--site-on-primary); }
+.btn.secondary { background:rgba(255,255,255,.75); color:#30365d; }
+.btn:hover { filter:brightness(.96); transform:translateY(-1px); }
+.hero-art { min-height:220px; display:grid; place-items:center; position:relative; }
+.console { width:min(100%,310px); aspect-ratio:1.15; border-radius:34px; background:linear-gradient(145deg,#fff,#dbe0ff); box-shadow:0 25px 65px rgba(73,81,160,.18); transform:rotate(-7deg); display:grid; place-items:center; position:relative; }
+.console:before { content:""; width:76%; height:68%; border-radius:20px; background:linear-gradient(135deg,#6d7aff,#9d8bff); box-shadow:inset 0 3px 10px rgba(255,255,255,.35); }
+.console:after { content:"✦"; position:absolute; color:#fff; font-size:70px; text-shadow:0 6px 20px rgba(0,0,0,.12); }
+.float { position:absolute; background:#fff; color:#4c55bd; padding:12px 15px; border-radius:15px; font-weight:800; box-shadow:0 12px 30px rgba(40,50,100,.12); }
+.float.one { top:8%; right:0; transform:rotate(7deg); }
+.float.two { bottom:5%; left:0; transform:rotate(-5deg); }
+.section-head { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:42px 0 18px; }
+h2 { margin:0; font-size:calc(25px * var(--site-heading-scale)); letter-spacing:-.8px; }
+.muted { color:#7a8095; font-size:13px; }
+.games { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.game-card { background:light-dark(#fff,#222638); border:1px solid light-dark(#e9ebf2,#34394c); border-radius:calc(20px * var(--site-radius-scale)); overflow:hidden; transition:.2s; }
+.game-card:hover { transform:translateY(-4px); box-shadow:0 15px 35px rgba(30,40,90,.09); }
+.cover { height:145px; display:grid; place-items:center; font-size:58px; position:relative; }
+.cover.minecraft { background:linear-gradient(135deg,#b8e6c3,#6ebd87); }
+.cover.racing { background:linear-gradient(135deg,#ffd5b5,#ff8b72); }
+.cover.arcade { background:linear-gradient(135deg,#d8ccff,#9b87ed); }
+.game-info { padding:16px; }
+.game-info h3 { margin:0 0 6px; font-size:17px; }
+.game-info p { margin:0 0 14px; color:#858ba0; font-size:13px; line-height:1.5; min-height:39px; }
+.tag { font-size:11px; font-weight:750; color:#5964d7; background:#eef0ff; padding:6px 9px; border-radius:999px; }
+.card-bottom { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.small-btn { border:0; background:var(--site-secondary); color:var(--site-on-secondary); border-radius:10px; padding:9px 12px; font-size:12px; font-weight:750; cursor:pointer; }
+.features { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+.feature { background:light-dark(#fff,#222638); border:1px solid light-dark(#e9ebf2,#34394c); border-radius:18px; padding:20px; }
+.feature .emoji { font-size:25px; }
+.feature h3 { margin:12px 0 6px; font-size:15px; }
+.feature p { margin:0; font-size:13px; line-height:1.6; color:#858ba0; }
+footer { border-top:1px solid light-dark(#e7e9f0,#34394c); margin-top:50px; padding:24px 20px; text-align:center; color:#8a90a3; font-size:12px; }
+.modal-backdrop { display:none; position:fixed; inset:0; background:rgba(22,25,43,.45); z-index:5; padding:20px; align-items:center; justify-content:center; }
+.modal-backdrop.open { display:flex; }
+.modal { width:min(100%,420px); background:light-dark(#fff,#222638); border-radius:22px; padding:24px; box-shadow:0 25px 70px rgba(0,0,0,.2); }
+.modal h3 { margin:0 0 10px; }
+.modal p { color:#858ba0; line-height:1.6; font-size:14px; }
+.modal-actions { display:flex; justify-content:flex-end; gap:9px; margin-top:20px; }
+@media(max-width:760px) { nav { gap:12px; } nav a { font-size:12px; } .hero { grid-template-columns:1fr; } .hero-art { min-height:190px; } .games { grid-template-columns:1fr; } .cover { height:155px; } .features { grid-template-columns:1fr; } .section-head { margin-top:32px; } }
+@media(max-width:390px) { nav a:nth-child(2) { display:none; } .brand { font-size:18px; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="site-header">
+    <div class="brand"><span class="brand-mark">▶</span> PLAYZONE</div>
+    <nav aria-label="Основная навигация">
+      <a href="#games">Игры</a><a href="#about">О сайте</a><a href="#community">Сообщество</a>
+    </nav>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Твоя игровая территория</span>
+        <h1>Играй.<br>Исследуй.<br>Побеждай.</h1>
+        <p>Добро пожаловать в PLAYZONE — место для тех, кто любит игры, открытия и хорошее настроение.</p>
+        <div class="actions">
+          <button class="btn" onclick="document.querySelector('#games').scrollIntoView({behavior:'smooth'})">Выбрать игру</button>
+          <button class="btn secondary" onclick="showInfo('Добро пожаловать в PLAYZONE! Здесь собраны игровые карточки и полезные разделы. Сайт можно настроить под твои любимые игры.')">О проекте</button>
+        </div>
+      </div>
+      <div class="hero-art" aria-label="Иллюстрация игровой приставки">
+        <div class="console"></div><div class="float one">LEVEL UP ✨</div><div class="float two">GG! 🎮</div>
+      </div>
+    </section>
+    <section id="games">
+      <div class="section-head"><div><div class="muted">ПОПРОБУЙ ЧТО-НИБУДЬ НОВОЕ</div><h2>Популярные игры</h2></div><span class="muted">Подборка</span></div>
+      <div class="games">
+        <article class="game-card">
+          <div class="cover minecraft">⛏️</div>
+          <div class="game-info"><h3>Minecraft</h3><p>Строй, исследуй мир и создавай собственные приключения.</p><div class="card-bottom"><span class="tag">Песочница</span><button class="small-btn" onclick="showInfo('Minecraft — игра-песочница с исследованием, строительством и выживанием. Добавь сюда свои гайды, сборки и новости.')">Подробнее</button></div></div>
+        </article>
+        <article class="game-card">
+          <div class="cover racing">🏎️</div>
+          <div class="game-info"><h3>Гонки</h3><p>Скорость, красивые трассы и борьба за первое место.</p><div class="card-bottom"><span class="tag">Гонки</span><button class="small-btn" onclick="showInfo('В этом разделе можно разместить любимые гоночные игры, обзоры машин и советы.')">Подробнее</button></div></div>
+        </article>
+        <article class="game-card">
+          <div class="cover arcade">👾</div>
+          <div class="game-info"><h3>Аркады</h3><p>Короткие игровые сессии и новые рекорды каждый день.</p><div class="card-bottom"><span class="tag">Аркада</span><button class="small-btn" onclick="showInfo('Здесь можно собрать подборку аркад, мини-игр и собственных рекордов.')">Подробнее</button></div></div>
+        </article>
+      </div>
+    </section>
+    <section id="about">
+      <div class="section-head"><div><div class="muted">ПОЧЕМУ PLAYZONE</div><h2>Больше, чем просто игры</h2></div></div>
+      <div class="features">
+        <div class="feature"><div class="emoji">🧭</div><h3>Открывай новое</h3><p>Знакомься с жанрами и находи игры по душе.</p></div>
+        <div class="feature"><div class="emoji">⚡</div><h3>Всё просто</h3><p>Удобная навигация и аккуратный дизайн на телефоне.</p></div>
+        <div class="feature" id="community"><div class="emoji">🤝</div><h3>Играй вместе</h3><p>Добавь сюда ссылки на свой игровой чат и сообщество.</p></div>
+      </div>
+    </section>
+  </main>
+  <footer>© 2026 PLAYZONE · Сделано с любовью к играм</footer>
+</div>
+<div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="if(event.target===this)closeInfo()">
+  <div class="modal"><h3 id="modal-title">Информация</h3><p id="modal-text"></p><div class="modal-actions"><button class="btn" onclick="closeInfo()">Понятно</button></div></div>
+</div>
+<script>
+function showInfo(message) {
+  document.getElementById('modal-text').textContent = message;
+  document.getElementById('modal').classList.add('open');
+}
+function closeInfo() { document.getElementById('modal').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeInfo(); });
+</script>
+</body>
+</html>
